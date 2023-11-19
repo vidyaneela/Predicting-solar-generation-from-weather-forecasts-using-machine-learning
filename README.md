@@ -343,9 +343,11 @@ cross_checking.head()
 ## Result:
 
 This project focuses on the development of a robust solar power generation forecasting system by integrating data from multiple sources, including solar generation records and weather sensor data from Plant and Plant 2. Leveraging advanced data science techniques, such as ensemble learning with Random forest regressor and decision tree regressor, the project aims to enhance the accuracy and reliability of solar energy predictions.
+
 ->The model achieved an accuracy of 0.99% on the test dataset, showcasing its ability to correctly predict the solar power generation.
 ->During training, the model reached a high accuracy of 100.0% on the training dataset, indicating effective learning and generalization.
 ->Precision, measuring the model's ability to correctly predict the generation values, is notably high as 100% as it depends upon the weather.
+
 These results suggest that thesolar power generation predicting model is both accurate and well-balanced, with high precision and recall values. Further analysis, including the examination of the confusion matrix and visualizations provide additional insights into the model's performance.
 
 
