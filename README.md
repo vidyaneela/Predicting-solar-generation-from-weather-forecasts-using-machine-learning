@@ -48,8 +48,7 @@ It's essential to preprocess and select features that not only have a direct imp
 
 
 ## Flow chart
-![image](https://github.com/vidyaneela/Predicting-solar-generation-from-weather-forecasts-using-machine-learning/assets/94169318/c6dbbd5c-36cb-4d98-a1bc-571453aa3619)
-
+![image](https://github.com/vidyaneela/Predicting-solar-generation-from-weather-forecasts-using-machine-learning/assets/94169318/68c9812d-398d-4262-b775-1317547431d1)
 
 
 ## Installation
