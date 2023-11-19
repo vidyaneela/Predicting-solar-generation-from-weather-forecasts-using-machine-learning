@@ -58,7 +58,7 @@ It's essential to preprocess and select features that not only have a direct imp
 ```
 pip install xgboost
 ```
-->Install jupyter notebook foe better run of code
+->Install jupyter notebook for better usage
 
 
 ## Usage
