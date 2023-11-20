@@ -76,34 +76,36 @@ pip install xgboost
 ->View and analyze the results directly within the Colab notebook.
 
 ## Program:
-```
+
 ### IMPORTING AND LOADING DATA
+```python
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+```
 
-import warnings
-warnings.filterwarnings("ignore")
-
-# IMPORTING POWER GENERATION &WEATHER SENSOR DATA
+### IMPORTING POWER GENERATION &WEATHER SENSOR DATA
+```python
 generation_data = pd.read_csv('/content/Plant_2_Generation_Data (1).csv')
 weather_data = pd.read_csv('/content/Plant_2_Weather_Sensor_Data (1).csv')
-
 generation_data.sample(5)
-
 weather_data.sample(5)
+```
 
-#DATA PREPROCESSING
+### DATA PREPROCESSING
+```python
 generation_data['DATE_TIME'] = pd.to_datetime(generation_data['DATE_TIME'], format='%Y-%m-%d %H:%M')
 weather_data['DATE_TIME'] = pd.to_datetime(weather_data['DATE_TIME'], format='%Y-%m-%d %H:%M:%S')
-
-#MERGING GENERATION DATA AND WEATHER SENSOR DATA
+```
+### MERGING GENERATION DATA AND WEATHER SENSOR DATA
+```python
 df_solar = pd.merge(generation_data.drop(columns=['PLANT_ID']), weather_data.drop(columns=['PLANT_ID', 'SOURCE_KEY']), on='DATE_TIME')
 df_solar.sample(5).style.background_gradient(cmap='cool')
-
-#DATA PREPROCESSING
+```
+### Adding separate time and date columns
+```python
 df_solar["DATE"] = pd.to_datetime(df_solar["DATE_TIME"]).dt.date
 df_solar["TIME"] = pd.to_datetime(df_solar["DATE_TIME"]).dt.time
 df_solar['DAY'] = pd.to_datetime(df_solar['DATE_TIME']).dt.day
@@ -122,19 +124,26 @@ df_solar.head(2)
 
 df_solar.info()
 
+
 df_solar.isnull().sum()
 
 df_solar.describe().style.background_gradient(cmap='rainbow')
-
+```
+### Converting 'SOURCE_KEY' from categorical form to numerical form
+```python
 from sklearn.preprocessing import LabelEncoder
 encoder = LabelEncoder()
 df_solar['SOURCE_KEY_NUMBER'] = encoder.fit_transform(df_solar['SOURCE_KEY'])
 df_solar.head()
-
+```
+### Data Visualization:
+```python
 sns.displot(data=df_solar, x="AMBIENT_TEMPERATURE", kde=True, bins=100, color="red", facecolor="#3F7F7F", height=5, aspect=3.5);
 
 df_solar['DATE'].nunique()
-
+```
+### Multiple Plotting of DC_POWER generation on per day basis:
+```python
 solar_dc = df_solar.pivot_table(values='DC_POWER', index='TIME', columns='DATE')
 
 def Daywise_plot(data=None, row=None, col=None, title='DC Power'):
@@ -153,7 +162,9 @@ daily_dc = df_solar.groupby('DATE')['DC_POWER'].agg('sum')
 ax = daily_dc.sort_values(ascending=False).plot.bar(figsize=(17,5), legend=True, color='red')
 plt.title('Daily DC Power')
 plt.show()
-
+```
+###  Multiple Plotting of IRRADIATION generation on per day basis:
+```python
 solar_irradiation = df_solar.pivot_table(values='IRRADIATION', index='TIME', columns='DATE')
 
 def Daywise_plot(data=None, row=None, col=None, title='IRRADIATION'):
@@ -172,7 +183,10 @@ daily_irradiation = df_solar.groupby('DATE')['IRRADIATION'].agg('sum')
 daily_irradiation.sort_values(ascending=False).plot.bar(figsize=(17,5), legend=True, color='blue')
 plt.title('IRRADIATION')
 plt.show()
-
+#In solar power plant DC_POWER or Output power is mostly depends on IRRADIATION .Or it is not wrong to say that it’s directly proportional.
+```
+###  Multiple Plotting of AMBIENT TEMPERATURE generation on per day basis:
+```python
 solar_ambient_temp = df_solar.pivot_table(values='AMBIENT_TEMPERATURE', index='TIME', columns='DATE')
 
 def Daywise_plot(data=None, row=None, col=None, title='AMBIENT_TEMPERATURE'):
@@ -186,7 +200,9 @@ def Daywise_plot(data=None, row=None, col=None, title='AMBIENT_TEMPERATURE'):
         ax.set_title('{} {}'.format(title, cols[i-1]), color='blue')
 
 plt.figure(figsize=(16,16))
-
+```
+###  Highest average DC_POWER is generated on "2020-05-15"
+```python
 date=["2020-05-15"]
 
 plt.subplot(411)
@@ -205,7 +221,9 @@ plt.title("Module Temperature & Ambient Temperature: {}" .format(date[0]));
 
 plt.tight_layout()
 plt.show()
-
+```
+### Lowest average DC_POWER is generated on "2020-06-11"
+```python
 date=["2020-06-11"]
 plt.figure(figsize=(16,16))
 
@@ -224,12 +242,18 @@ plt.title("Module Temperature & Ambient Temperature: {}" .format(date[0]));
 
 plt.tight_layout()
 plt.show()
-
 solar_dc_power = df_solar[df_solar['DC_POWER'] > 0]['DC_POWER'].values
 solar_ac_power = df_solar[df_solar['AC_POWER'] > 0]['AC_POWER'].values
 
 solar_plant_eff = (np.max(solar_ac_power) / np.max(solar_dc_power)) * 100
 print(f"Power ratio AC/DC (Efficiency) of Solar Power Plant:  {solar_plant_eff:0.3f} %")
+```
+### Solar Power Plant Inverter Efficiency Calculation:
+```python
+#The inverter efficiency refers to how much dc power will be converted to ac power, as some of power will be lost during this transition in two forms:
+Heat loss.
+Stand-by power which consumed just to keep the inverter in power mode. Also, we can refer to it as inverter power consumption at no load condition.
+Hence, inverter efficiency = pac/pdc where pac refers to ac output power in watt and pdc refers to dc input power in watts.
 
 AC_list=[]
 for i in df_solar['AC_POWER']:
@@ -257,7 +281,9 @@ plt.plot(AC_list,eff,color='green')
 plt.xlabel('Output power in kW')
 plt.ylabel('efficiency AC/DC')
 plt.title('Output power vs efficiency');
-
+```
+### Solar Power Prediction
+```python
 df2 = df_solar.copy()
 X = df2[['DAILY_YIELD','TOTAL_YIELD','AMBIENT_TEMPERATURE','MODULE_TEMPERATURE','IRRADIATION','DC_POWER']]
 y = df2['AC_POWER']
@@ -265,16 +291,20 @@ y = df2['AC_POWER']
 X.head()
 
 y.head()
-
+```
+### Splitting the data
+```python
 from sklearn.model_selection import train_test_split
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=.2,random_state=21)
-
+```
 ## MODEL CREATION
+```python
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import cross_val_score
-
+```
 # Instantiate a Gradient Boosting Regressor
+```python
 gb_regressor = GradientBoostingRegressor()
 
 # Fit the model to the training data
@@ -292,8 +322,9 @@ cross_val_scores_gb = cross_val_score(gb_regressor, X, y, cv=5)  # Cross-validat
 print(f'R2 Score (Gradient Boosting): {r2_gb:}')
 print(f'Mean Squared Error (Gradient Boosting): {mse_gb:}')
 print(f'Cross-Validation Scores (Gradient Boosting): {cross_val_scores_gb}')
-
+```
 # MODEL CREATION
+```python
 pip install xgboost
 
 import xgboost as xgb
@@ -314,7 +345,6 @@ r2_xgb = r2_score(y_test, y_pred_xgb)
 mse_xgb = mean_squared_error(y_test, y_pred_xgb)
 cross_val_scores_xgb = cross_val_score(xgb_regressor, X, y, cv=5)  # Cross-validation scores
 
-# RESULT
 # Print evaluation metrics
 print(f'R2 Score (XGBoost): {r2_xgb:}')
 print(f'Mean Squared Error (XGBoost): {mse_xgb:}')
@@ -325,15 +355,18 @@ print(prediction)
 
 cross_checking = pd.DataFrame({'Actual' : y_test , 'Predicted' : prediction})
 cross_checking.head()
-
+```
 # Visualize actual vs. predicted values
+```python
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred_gb, alpha=0.5)
 plt.title('Actual vs. Predicted Solar Power Generation')
 plt.xlabel('Actual Solar Power Generation')
 plt.ylabel('Predicted Solar Power Generation')
 plt.show()
+```
 # Visualize actual vs. predicted values
+```python
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred_xgb, alpha=0.5)
 plt.title('Actual vs. Predicted Solar Power Generation')
@@ -341,7 +374,6 @@ plt.xlabel('Actual Solar Power Generation')
 plt.ylabel('Predicted Solar Power Generation')
 plt.show()
 ```
-
 ## Output:
 ### Model evaluation metrics:
 #### GradientBoostingRegressor:
