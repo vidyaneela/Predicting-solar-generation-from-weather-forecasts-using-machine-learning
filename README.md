@@ -1,8 +1,6 @@
-# Predicting-solar-generation-from-weather-forecasts-using-machine-learning
+## PREDICTICTING SOLAR POWER GENERATION FROM WEATHER FORECAST USING MACHINE LEARNING
+The need for more sustainable energy sources has grown as a result of the energy crisis.Increasing amount of households and companies are implementing solar panels to meet  their energy needs, making solar energy a key player in the market for alternative energy. Solar power sources are unpredictable by nature because the output power of PV systems is alternating and heavily dependent on environmental conditions. Planning ahead is essential for solar power generation due to the unpredictable nature of  photovoltaic systems.The objective of the solar power  project is to improve the efficiency and precision of solar power output prediction by utilizing machine learning models. weuse powerful ensemble models including Gradient Boosting and XGBoost regressors.Ensemble models are machine learning techniques that combine the predictions of multiple individual models to improve overall performance and robustness.
 
-Predicting solar generation from weather forecasts using machine learning involves leveraging historical solar generation data alongside corresponding weather conditions to create a model that forecasts solar power output based on future weather predictions.
-
-## Features
 When utilizing Gradient Boosting Regressor and XGBoost for predicting solar generation from weather forecasts, selecting the right features is crucial for model performance. Here are some essential features that could be beneficial for these specific models:
 
 1. **Weather Variables**:
@@ -30,22 +28,26 @@ When utilizing Gradient Boosting Regressor and XGBoost for predicting solar gene
 6. **Additional Environmental Factors** (if available):
    Potential impact on solar panel efficiency.
 
-7. **Holiday/Events** (if available):
-   Events that might affect energy consumption patterns.
-
-For models like Gradient Boosting Regressor and XGBoost, these features can assist in capturing complex relationships and non-linearities within the data. Feature importance analysis provided by these models can also guide in identifying the most influential features for prediction.
-
-It's essential to preprocess and select features that not only have a direct impact on solar generation but also prevent overfitting and maintain model generalizability. Experimentation with different combinations of features and their transformations could further refine the models' accuracy in predicting solar power output.
+This research included Solar power generation data and weather sensor data of a solar power plant
+### Generation data:
+  * DATE_TIME
+  * PLANT_ID
+  * DC_POWER
+  * AC_POWER
+  * DAILY_YIELD
+  * TOTAL_YIELD
+  ### weather sensor data:
+  * DATE_TIME
+  * PLANT_ID
+  * AMBIENT_TEMPERATURE
+  * MODULE_TEMPERATURE
+    
 
 
 ## Requirements
 ->Python
 ->Environment with the specified Python libraries (Jupyter Notebooks, Google Colab)
 ->Required Python packages: pandas, pandas, matplotlib.
-
-## Architecture Diagram
-
-
 
 ## Flow chart
 ![image](https://github.com/vidyaneela/Predicting-solar-generation-from-weather-forecasts-using-machine-learning/assets/94169318/68c9812d-398d-4262-b775-1317547431d1)
@@ -324,6 +326,20 @@ print(prediction)
 cross_checking = pd.DataFrame({'Actual' : y_test , 'Predicted' : prediction})
 cross_checking.head()
 
+# Visualize actual vs. predicted values
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred_gb, alpha=0.5)
+plt.title('Actual vs. Predicted Solar Power Generation')
+plt.xlabel('Actual Solar Power Generation')
+plt.ylabel('Predicted Solar Power Generation')
+plt.show()
+# Visualize actual vs. predicted values
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred_xgb, alpha=0.5)
+plt.title('Actual vs. Predicted Solar Power Generation')
+plt.xlabel('Actual Solar Power Generation')
+plt.ylabel('Predicted Solar Power Generation')
+plt.show()
 ```
 
 ## Output:
