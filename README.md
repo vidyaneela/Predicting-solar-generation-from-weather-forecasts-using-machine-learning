@@ -297,13 +297,13 @@ y.head()
 from sklearn.model_selection import train_test_split
 X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=.2,random_state=21)
 ```
-## MODEL CREATION
+### MODEL CREATION
 ```python
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.model_selection import cross_val_score
 ```
-# Instantiate a Gradient Boosting Regressor
+### Instantiate a Gradient Boosting Regressor
 ```python
 gb_regressor = GradientBoostingRegressor()
 
@@ -323,7 +323,7 @@ print(f'R2 Score (Gradient Boosting): {r2_gb:}')
 print(f'Mean Squared Error (Gradient Boosting): {mse_gb:}')
 print(f'Cross-Validation Scores (Gradient Boosting): {cross_val_scores_gb}')
 ```
-# MODEL CREATION
+### MODEL CREATION
 ```python
 pip install xgboost
 
@@ -356,7 +356,7 @@ print(prediction)
 cross_checking = pd.DataFrame({'Actual' : y_test , 'Predicted' : prediction})
 cross_checking.head()
 ```
-# Visualize actual vs. predicted values
+### Visualize actual vs. predicted values
 ```python
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred_gb, alpha=0.5)
@@ -365,7 +365,7 @@ plt.xlabel('Actual Solar Power Generation')
 plt.ylabel('Predicted Solar Power Generation')
 plt.show()
 ```
-# Visualize actual vs. predicted values
+### Visualize actual vs. predicted values
 ```python
 plt.figure(figsize=(10, 6))
 plt.scatter(y_test, y_pred_xgb, alpha=0.5)
@@ -374,7 +374,7 @@ plt.xlabel('Actual Solar Power Generation')
 plt.ylabel('Predicted Solar Power Generation')
 plt.show()
 ```
-## Output:
+### Output:
 ### Model evaluation metrics:
 #### GradientBoostingRegressor:
 ![image](https://github.com/vidyaneela/Predicting-solar-generation-from-weather-forecasts-using-machine-learning/assets/94169318/5ed9b431-6d43-490f-879b-fc6620da7bb3)
